@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE UNKNOWNS - Battle Royale Tournaments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Blue neon theme colors from the first website */
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-purple: #9d00ff;
+            --dark-bg: #0a0a0a;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+        }
+
+        .neon-border {
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue), inset 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .neon-button {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .neon-button:hover {
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+            background-color: #1a1a1a;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(157, 0, 255, 0.3);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
+            border-radius: 5px;
+        }
+
+        /* Navigation active state */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Section hiding */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Tab styling */
+        .tab-active {
+            background-color: rgba(0, 212, 255, 0.2) !important;
+            border-bottom: 2px solid var(--neon-blue) !important;
+        }
+
+        /* Search bar styling */
+        .search-container {
+            position: relative;
+        }
+
+        .search-container input {
+            padding-right: 40px;
+            background-color: #1a1a1a;
+            border-color: var(--neon-blue);
+        }
+
+        .search-container button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+
+        /* Main content area to push footer to bottom */
+        .main-content {
+            flex: 1;
+        }
+
+        /* Blue neon style badges */
+        .neon-badge {
+            background-color: var(--neon-blue);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        /* Military style elements with blue neon */
+        .military-bg {
+            background-color: #0a1929;
+            border: 1px solid var(--neon-blue);
+        }
+
+        /* Coming soon styling */
+        .coming-soon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            text-align: center;
+        }
+
+        .coming-soon h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--neon-blue);
+        }
+
+        .coming-soon p {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Points system styling */
+        .points-card {
+            background-color: #1a1a1a;
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .points-card h3 {
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .points-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .points-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .points-list .rank-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Rules section styling */
+        .rule-card {
+            background-color: #1a1a1a;
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .rule-number {
+            color: var(--neon-blue);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Users table styling */
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .users-table th {
+            background-color: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .users-table tr:hover {
+            background-color: rgba(0, 212, 255, 0.05);
+        }
+
+        /* Counter styling */
+        .counter-container {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(157, 0, 255, 0.1));
+            border: 2px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .counter-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .counter-label {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        /* Sub-tabs styling */
+        .sub-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .sub-tab {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #1a1a1a;
+            border: 1px solid var(--neon-blue);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sub-tab:hover {
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+
+        .sub-tab.active {
+            background-color: rgba(0, 212, 255, 0.2);
+            border-bottom: 2px solid var(--neon-blue);
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 w-full bg-black bg-opacity-90 backdrop-blur-sm z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold neon-text flex items-center">
+                    <i class="fas fa-crosshairs mr-2 text-cyan-400"></i>
+                    PUBG TOURNAMENT
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" data-page="home"
+                        class="nav-link active text-white hover:text-cyan-400 transition-colors">Home</a>
+                    <a href="#" data-page="leaderboard"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">Leaderboard</a>
+                    <a href="#" data-page="history"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">History</a>
+                    <a href="#" data-page="rules"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">Rules & Points</a>
+                    <a href="#" data-page="users"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">Users</a>
+                    <a href="#" data-page="admin"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">Admin</a>
+                    <a href="#" data-page="social"
+                        class="nav-link text-white hover:text-cyan-400 transition-colors">Social</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <a href="#" data-page="home"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Home</a>
+                <a href="#" data-page="leaderboard"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Leaderboard</a>
+                <a href="#" data-page="history"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">History</a>
+                <a href="#" data-page="rules"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Rules &
+                    Points</a>
+                <a href="#" data-page="users"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Users</a>
+                <a href="#" data-page="admin"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Admin</a>
+                <a href="#" data-page="social"
+                    class="mobile-nav-link block py-2 text-white hover:text-cyan-400 transition-colors">Social</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="content-section active pt-24 pb-16 md:pt-32 md:pb-24">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0">
+                        <div class="mb-4">
+                            <span class="neon-badge">BATTLE ROYALE</span>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4 neon-text">Bullet Frenzy</h1>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-cyan-400 mr-3"></i>
+                                <!-- <span>June 15-17, 2023 | 18:00 - 22:00 GMT</span> -->
+                                <span>Will be Announced</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-gamepad text-cyan-400 mr-3"></i>
+                                <span>Mode: TDM</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-trophy text-cyan-400 mr-3"></i>
+                                <span>Winner: 1</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-money-bill-wave text-cyan-400 mr-3"></i>
+                                <span>Entry Fee: 200 PKR per player</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                                <span>Prize Pool: 1,000 PKR</span>
+                            </div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScB5JqwiXsL_tzVT8KyuKOKuYyDRFw48OeKjoh98jmTnFwiig/viewform" target="_blank"
+                            class="page-link inline-block px-8 py-3 rounded-full text-white font-bold neon-button">
+                            REGISTER
+                        </a>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <div class="relative">
+                            <img src="assets/bulletfrenzy.png"
+                                alt="PUBG Tournament Banner" class="rounded-lg neon-border max-w-full">
+                            <div
+                                class="absolute -bottom-4 -right-4 bg-red-600 text-white px-4 py-2 rounded-lg font-bold">
+                                LIVESTREAM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard" class="content-section py-16 md:py-24 military-bg">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">LEADERBOARD</h2>
+
+                <!-- Main Category Tabs -->
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                        <button type="button"
+                            class="category-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-l-lg hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500 tab-active"
+                            data-category="normal">
+                            PAY TO WIN
+                        </button>
+                        <button type="button"
+                            class="category-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-r-md hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500"
+                            data-category="esports">
+                            ESPORTS
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Normal (Pay to Win) Leaderboard Content -->
+                <div id="normal-content" class="leaderboard-content">
+                    <!-- Game Mode Sub-Tabs -->
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-mode="classic">Classic</button>
+                        <button class="sub-tab" data-mode="arena">Arena</button>
+                    </div>
+
+                    <!-- Ranking Criteria Tabs -->
+                    <div class="flex justify-center mb-8">
+                        <div class="inline-flex rounded-md shadow-sm" role="group">
+                            <button type="button"
+                                class="ranking-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-l-lg hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500 tab-active"
+                                data-rank="kills">
+                                KILLS
+                            </button>
+                            <button type="button"
+                                class="ranking-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border-t border-b border-gray-700 hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500"
+                                data-rank="wins">
+                                WINS
+                            </button>
+                            <button type="button"
+                                class="ranking-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-r-md hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500"
+                                data-rank="points">
+                                POINTS
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="flex justify-center mb-6">
+                        <div class="search-container w-full max-w-md">
+                            <input type="text" id="player-search" placeholder="Search by Player ID (e.g., 51836530730)"
+                                class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            <button id="search-button" class="text-cyan-400 hover:text-cyan-300">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Leaderboard Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full max-w-6xl mx-auto">
+                            <thead>
+                                <tr class="border-b border-cyan-500">
+                                    <th class="py-3 px-4 text-left">Rank</th>
+                                    <th class="py-3 px-4 text-left">Player ID</th>
+                                    <th class="py-3 px-4 text-left">IG_Name</th>
+                                    <th class="py-3 px-4 text-left">RL_Name</th>
+                                    <th class="py-3 px-4 text-left">Wins</th>
+                                    <th class="py-3 px-4 text-left">Kills</th>
+                                    <th class="py-3 px-4 text-left">Points</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Leaderboard data will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <div id="no-results" class="no-results hidden">
+                            <p>No players found matching your search.</p>
+                        </div>
+                    </div>
+
+                    <!-- Current Selection Display -->
+                    <div class="text-center mt-6">
+                        <p class="text-gray-400">Showing: <span id="current-selection"
+                                class="text-cyan-400 font-bold">CLASSIC - KILLS</span></p>
+                    </div>
+                </div>
+
+                <!-- Esports Coming Soon Content -->
+                <div id="esports-content" class="leaderboard-content hidden">
+                    <div class="coming-soon">
+                        <i class="fas fa-trophy text-6xl mb-4 text-cyan-400"></i>
+                        <h3 class="neon-text">ESPORTS</h3>
+                        <p>Our premium esports tournaments with cash prizes are coming soon! Get ready for intense
+                            competition and amazing rewards.</p>
+                        <div class="mt-8">
+                            <button class="px-8 py-3 rounded-full text-white font-bold neon-button">
+                                NOTIFY ME
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="content-section py-16 md:py-24 bg-gray-900">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">TOURNAMENT HISTORY</h2>
+                <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">Summer Championship 2023</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">May 20-22, 2023</p>
+                        <p class="text-gray-400 mb-3">Mode: Duo</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: Team Alpha</span>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">Spring Invitational</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">April 10-12, 2023</p>
+                        <p class="text-gray-400 mb-3">Mode: Squad</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: Phoenix Squad</span>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">Winter Classic</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">February 5-7, 2023</p>
+                        <p class="text-gray-400 mb-3">Mode: Solo</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: ShadowSniper</span>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">New Year Battle</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">January 1-3, 2023</p>
+                        <p class="text-gray-400 mb-3">Mode: Squad</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: Night Wolves</span>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">Holiday Special</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">December 24-26, 2022</p>
+                        <p class="text-gray-400 mb-3">Mode: Duo</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: Fire & Ice</span>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-6 neon-border card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-cyan-400">Autumn Showdown</h3>
+                            <span class="neon-badge">COMPLETED</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">November 10-12, 2022</p>
+                        <p class="text-gray-400 mb-3">Mode: Squad</p>
+                        <div class="flex items-center">
+                            <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                            <span>Winner: Storm Breakers</span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+
+        <!-- Rules & Points Section -->
+        <section id="rules" class="content-section py-16 md:py-24 military-bg">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">⚔️ TOURNAMENT RULES & 🏆 POINTS
+                    SYSTEM</h2>
+
+                <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Rules Column -->
+                        <div>
+                            <h3 class="text-2xl font-bold text-cyan-400 mb-6 text-center">Tournament Rules</h3>
+
+                            <div class="rule-card">
+                                <div class="flex items-start">
+                                    <span class="rule-number">1️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Entry Fee 💸</h4>
+                                        <p>Pay before deadline. Non-refundable once confirmed.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">2️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">WhatsApp Channel 📲</h4>
+                                        <p>Mandatory join; all updates shared here only.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">3️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Check-In ⏰</h4>
+                                        <p>Be online in WhatsApp 10–15 mins before match. Late = out.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">4️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Room ID/Pass 🔑</h4>
+                                        <p>Shared only in WhatsApp. Don't leak or share.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">5️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Team Size 👥</h4>
+                                        <p>Exactly 4 players (if squad). Subs only allowed between matches.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">6️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">In-Game Name 🆔</h4>
+                                        <p>Must match registration. Name changes = DQ.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">7️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Fair Play 🚫</h4>
+                                        <p>No hacks, cheats, teaming, glitches, or illegal software.</p>
+                                        <p class="mt-2 text-sm">🎥 If you suspect cheating: record video → send directly
+                                            to admin OR upload on YouTube/Instagram and share the link.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="rule-number">8️⃣</span>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-cyan-400 mb-1">Devices 💻📱</h4>
+                                        <p>Emulators/third-party tools banned (unless tournament allows).</p>
+                                    </div>
+                                </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">9️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Streaming 🎥</h4>
+                                    <p>Allowed, but must have 2-minute delay to prevent stream sniping.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">🔟</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Behavior 🤝</h4>
+                                    <p>No toxicity, abusive chat, or misconduct. Violators banned.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">1️⃣1️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Scoring System 🏆</h4>
+                                    <p>Placement + kills = points. (See points table).</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">1️⃣2️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Prize Claim 💰</h4>
+                                    <p>Winners confirm ID within 24 hrs; payouts within [X] days.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">1️⃣3️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Tech Issues 📡</h4>
+                                    <p>Your internet/device = your responsibility. No restarts.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">1️⃣4️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Disputes ⚖️</h4>
+                                    <p>Raise immediately after match.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <span class="rule-number">1️⃣5️⃣</span>
+                                <div>
+                                    <h4 class="text-lg font-bold text-cyan-400 mb-1">Admin Rights 👑</h4>
+                                    <p>Admin may adjust rules, reschedule, or cancel anytime. Admin decision =
+                                        final.</p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Points Column -->
+                <div>
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-6 text-center">Points System</h3>
+
+                    <div class="points-card">
+                        <h4 class="text-xl font-bold mb-4">Placement Points</h4>
+                        <ul class="points-list">
+                            <li>
+                                <span class="rank-icon">🥇</span>
+                                <span>Winner (1st Place) – 15 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">🥈</span>
+                                <span>2nd Place – 12 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">🥉</span>
+                                <span>3rd Place – 10 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">4️⃣</span>
+                                <span>4th Place – 8 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">5️⃣</span>
+                                <span>5th Place – 6 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">6–10</span>
+                                <span>6–10th Place – 4 pts</span>
+                            </li>
+                            <li>
+                                <span class="rank-icon">11–20</span>
+                                <span>11–20th Place – 2 pts</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="points-card">
+                        <h4 class="text-xl font-bold mb-4">Kill Points</h4>
+                        <ul class="points-list">
+                            <li>
+                                <span class="rank-icon">🔫</span>
+                                <span>Per Kill – 1 pt</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="points-card">
+                        <h4 class="text-xl font-bold mb-4">How It Works</h4>
+                        <p class="text-gray-300">Your total score is calculated by adding your placement points
+                            to your kill points. For example, if you finish 3rd (10 points) and get 5 kills (5
+                            points), your total score would be 15 points.</p>
+                        <p class="text-gray-300 mt-3">The higher your total score, the higher you'll rank on the
+                            leaderboard. Consistency is key - aim for high placements while maximizing your
+                            kills!</p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+
+    <!-- Users Section -->
+    <section id="users" class="content-section py-16 md:py-24 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">TOTAL REGISTERED USERS</h2>
+
+            <!-- Main Category Tabs -->
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button type="button"
+                        class="users-category-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-l-lg hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500 tab-active"
+                        data-category="normal">
+                        NORMAL
+                    </button>
+                    <button type="button"
+                        class="users-category-tab px-6 py-3 text-sm font-medium text-white bg-gray-800 border border-gray-700 rounded-r-md hover:bg-gray-700 focus:z-10 focus:ring-2 focus:ring-cyan-500"
+                        data-category="esports">
+                        ESPORTS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Normal Users Content -->
+            <div id="normal-users-content" class="users-content">
+                <!-- Total Counter -->
+                <div class="counter-container max-w-md mx-auto mb-8">
+                    <div class="counter-number" id="total-users-count">0</div>
+                    <div class="counter-label">Total Registered Users</div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex justify-center mb-6">
+                    <div class="search-container w-full max-w-md">
+                        <input type="text" id="users-search" placeholder="Search by Real Name or In-Game ID"
+                            class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <button id="users-search-button" class="text-cyan-400 hover:text-cyan-300">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="users-table max-w-4xl mx-auto">
+                        <thead>
+                            <tr>
+                                <th>Real Name</th>
+                                <th>In-Game Name</th>
+                                <th>In-Game ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="normal-users-body">
+                            <!-- User data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                    <div id="users-no-results" class="no-results hidden">
+                        <p>No users found matching your search.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esports Coming Soon Content -->
+            <div id="esports-users-content" class="users-content hidden">
+                <div class="coming-soon">
+                    <i class="fas fa-users text-6xl mb-4 text-cyan-400"></i>
+                    <h3 class="neon-text">ESPORTS USERS</h3>
+                    <p>Esports user registration will be available soon! Get ready for premium tournaments with
+                        exclusive features.</p>
+                    <div class="mt-8">
+                        <button class="px-8 py-3 rounded-full text-white font-bold neon-button">
+                            NOTIFY ME
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Section -->
+    <section id="admin" class="content-section py-16 md:py-24 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">ADMIN CONTACT</h2>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gray-800 rounded-lg p-8 neon-border">
+                    <div class="flex flex-col md:flex-row items-center mb-8">
+                        <div class="w-32 h-32 rounded-full overflow-hidden mb-6 md:mb-0 md:mr-8">
+                            <img src="https://picsum.photos/seed/admin/200/200.jpg" alt="Admin"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-cyan-400 mb-2">Sayyed Bukhari</h3>
+                            <p class="text-gray-300 mb-4">Tournament Administrator</p>
+                            <p class="text-gray-400">For any queries, issues, or assistance regarding the
+                                tournament, feel free to contact me through any of the following channels:</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gray-700 rounded-lg p-6 text-center">
+                            <i class="fab fa-instagram text-3xl text-pink-500 mb-4"></i>
+                            <h4 class="text-lg font-bold text-cyan-400 mb-2">Instagram</h4>
+                            <p class="text-gray-300">_sayyed_bukhari</p>
+                        </div>
+
+                        <div class="bg-gray-700 rounded-lg p-6 text-center">
+                            <i class="fas fa-envelope text-3xl text-red-500 mb-4"></i>
+                            <h4 class="text-lg font-bold text-cyan-400 mb-2">Email</h4>
+                            <p class="text-gray-300">sayyedbukhari792@gmail.com</p>
+                        </div>
+
+                        <div class="bg-gray-700 rounded-lg p-6 text-center">
+                            <i class="fab fa-whatsapp text-3xl text-green-500 mb-4"></i>
+                            <h4 class="text-lg font-bold text-cyan-400 mb-2">WhatsApp</h4>
+                            <p class="text-gray-300">+923124972320</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <p class="text-gray-400 mb-4">For urgent matters, please message on WhatsApp first.</p>
+                        <a href="https://wa.me/923124972320" target="_blank"
+                            class="inline-block px-8 py-3 rounded-full text-white font-bold neon-button">
+                            <i class="fab fa-whatsapp mr-2"></i>MESSAGE ON WHATSAPP
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Section -->
+    <section id="social" class="content-section py-16 md:py-24 military-bg">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center neon-text">CONNECT WITH US</h2>
+            <p class="text-center text-gray-300 max-w-2xl mx-auto mb-12">Join our community to stay updated with the
+                latest tournament news, announcements, and connect with other players.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- WhatsApp Channel -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center mb-4">
+                            <i class="fab fa-whatsapp text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">WhatsApp Channel</h3>
+                        <p class="text-gray-400 mb-4">Join our official WhatsApp channel for instant updates and
+                            announcements.</p>
+                        <a href="https://whatsapp.com/channel/0029Vb6kLOV6hENkMNRZnH1R" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Join Channel
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Discord Server -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center mb-4">
+                            <i class="fab fa-discord text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">Discord Server</h3>
+                        <p class="text-gray-400 mb-4">Join our Discord community to chat with other players and
+                            participate in discussions.</p>
+                        <a href="https://discord.gg/pubgtournament" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Join Server
+                        </a>
+                    </div>
+                </div>
+
+                <!-- YouTube Channel -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center mb-4">
+                            <i class="fab fa-youtube text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">YouTube Channel</h3>
+                        <p class="text-gray-400 mb-4">Subscribe to our YouTube channel for tournament highlights and
+                            gameplay videos.</p>
+                        <a href="#" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Twitter -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-blue-400 flex items-center justify-center mb-4">
+                            <i class="fab fa-twitter text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">Twitter</h3>
+                        <p class="text-gray-400 mb-4">Follow us on Twitter for real-time updates and tournament
+                            news.
+                        </p>
+                        <a href="https://twitter.com/pubgtournament" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Follow
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mb-4">
+                            <i class="fab fa-instagram text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">Instagram</h3>
+                        <p class="text-gray-400 mb-4">Follow us on Instagram for behind-the-scenes content and
+                            player
+                            features.</p>
+                        <a href="https://www.instagram.com/_sayyed_bukhari/" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Follow
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Twitch -->
+                <div class="rounded-lg p-6 neon-border card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center mb-4">
+                            <i class="fab fa-twitch text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-400">Twitch</h3>
+                        <p class="text-gray-400 mb-4">Watch live tournament streams and gameplay on our Twitch
+                            channel.
+                        </p>
+                        <a href="#" target="_blank"
+                            class="inline-block px-6 py-2 rounded-full text-white font-bold neon-button">
+                            Watch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-black bg-opacity-90 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-crosshairs text-cyan-400 mr-2"></i>
+                        <h3 class="text-xl font-bold neon-text">PUBG TOURNAMENT</h3>
+                    </div>
+                    <p class="text-gray-400">© 2025 All rights reserved by Sayyed Bukhari</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://whatsapp.com/channel/0029Vb6kLOV6hENkMNRZnH1R" target="_blank"
+                        class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                    </a>
+                    <a href="#" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-discord text-2xl"></i>
+                    </a>
+                    <a href="#" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-youtube text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Leaderboard data for different modes and ranking criteria
+        const leaderboardData = {
+            classic: {
+                kills: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 10, kills: 142, points: 2180 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 9, kills: 138, points: 2050 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 8, kills: 125, points: 1920 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 7, kills: 120, points: 1850 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 6, kills: 115, points: 1720 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 5, kills: 110, points: 1650 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 4, kills: 105, points: 1520 }
+                ],
+                wins: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 10, kills: 142, points: 2180 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 9, kills: 138, points: 2050 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 8, kills: 125, points: 1920 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 7, kills: 120, points: 1850 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 6, kills: 115, points: 1720 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 5, kills: 110, points: 1650 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 4, kills: 105, points: 1520 }
+                ],
+                points: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 10, kills: 142, points: 2180 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 9, kills: 138, points: 2050 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 8, kills: 125, points: 1920 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 7, kills: 120, points: 1850 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 6, kills: 115, points: 1720 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 5, kills: 110, points: 1650 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 4, kills: 105, points: 1520 }
+                ]
+            },
+            arena: {
+                kills: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 8, kills: 98, points: 1780 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 7, kills: 92, points: 1650 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 6, kills: 85, points: 1520 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 5, kills: 78, points: 1450 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 4, kills: 72, points: 1320 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 3, kills: 65, points: 1250 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 2, kills: 58, points: 1120 }
+                ],
+                wins: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 8, kills: 98, points: 1780 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 7, kills: 92, points: 1650 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 6, kills: 85, points: 1520 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 5, kills: 78, points: 1450 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 4, kills: 72, points: 1320 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 3, kills: 65, points: 1250 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 2, kills: 58, points: 1120 }
+                ],
+                points: [
+                    { rank: 1, playerId: '51792791638', igName: 'ムss͜et々7', rlName: 'Sayyed Bukhari', wins: 0, kills: 0, points: 0 },
+                    // { rank: 2, playerId: '62348712945', igName: 'ShadowSniper', rlName: 'Jane Smith', wins: 8, kills: 98, points: 1780 },
+                    // { rank: 3, playerId: '73456089213', igName: 'PhoenixRise', rlName: 'Mike Johnson', wins: 7, kills: 92, points: 1650 },
+                    // { rank: 4, playerId: '84567123456', igName: 'StormBreaker', rlName: 'Sarah Williams', wins: 6, kills: 85, points: 1520 },
+                    // { rank: 5, playerId: '95678234567', igName: 'GhostWalker', rlName: 'David Brown', wins: 5, kills: 78, points: 1450 },
+                    // { rank: 6, playerId: '06789345678', igName: 'DragonSlayer', rlName: 'Emily Davis', wins: 4, kills: 72, points: 1320 },
+                    // { rank: 7, playerId: '17890456789', igName: 'NightHawk', rlName: 'Chris Wilson', wins: 3, kills: 65, points: 1250 },
+                    // { rank: 8, playerId: '28901567890', igName: 'ThunderBolt', rlName: 'Alex Martinez', wins: 2, kills: 58, points: 1120 }
+                ]
+            }
+        };
+
+        // Normal users data
+        const normalUsersData = [
+            { realName: 'Sayyed Bukhari', igName: 'ムss͜et々7', igId: '51792791638' },
+            // { realName: 'Jane Smith', igName: 'ShadowSniper', igId: '62348712945' },
+            // { realName: 'Mike Johnson', igName: 'PhoenixRise', igId: '73456089213' },
+            // { realName: 'Sarah Williams', igName: 'StormBreaker', igId: '84567123456' },
+            // { realName: 'David Brown', igName: 'GhostWalker', igId: '95678234567' },
+            // { realName: 'Emily Davis', igName: 'DragonSlayer', igId: '06789345678' },
+            // { realName: 'Chris Wilson', igName: 'NightHawk', igId: '17890456789' },
+            // { realName: 'Alex Martinez', igName: 'ThunderBolt', igId: '28901567890' },
+            // { realName: 'Sam Taylor', igName: 'IceBreaker', igId: '39012345678' },
+            // { realName: 'Jessica Lee', igName: 'FireStorm', igId: '40123456789' },
+            // { realName: 'Robert Chen', igName: 'DarkKnight', igId: '41234567890' },
+            // { realName: 'Lisa Anderson', igName: 'RoseBud', igId: '42345678901' },
+            // { realName: 'James Wilson', igName: 'CyberNinja', igId: '43456789012' },
+            // { realName: 'Maria Garcia', igName: 'StarGazer', igId: '44567890123' },
+            // { realName: 'Daniel Kim', igName: 'ThunderStrike', igId: '45678901234' }
+        ];
+
+        // Current selections
+        let currentMode = 'classic';
+        let currentRanking = 'kills';
+        let currentCategory = 'normal';
+        let currentUsersCategory = 'normal';
+        let searchQuery = '';
+        let usersSearchQuery = '';
+
+        // Function to animate counter
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(start);
+                }
+            }, 16);
+        }
+
+        // Function to render leaderboard
+        function renderLeaderboard() {
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            const currentSelection = document.getElementById('current-selection');
+            const noResults = document.getElementById('no-results');
+
+            // Clear existing rows
+            leaderboardBody.innerHTML = '';
+
+            // Get data for current mode and ranking
+            let data = leaderboardData[currentMode][currentRanking];
+
+            // Apply search filter if there's a search query
+            if (searchQuery) {
+                data = data.filter(player =>
+                    player.playerId.includes(searchQuery)
+                );
+            }
+
+            // Update current selection display
+            currentSelection.textContent = `${currentMode.toUpperCase()} - ${currentRanking.toUpperCase()}`;
+
+            // Show/hide no results message
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            // Add rows to table
+            data.forEach(player => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-cyan-500 hover:bg-gray-800 transition-colors';
+
+                // Set rank color
+                let rankColor = '';
+                if (player.rank === 1) rankColor = 'text-yellow-400 font-bold';
+                else if (player.rank === 2) rankColor = 'text-gray-300 font-bold';
+                else if (player.rank === 3) rankColor = 'text-orange-600 font-bold';
+
+                row.innerHTML = `
+                    <td class="py-3 px-4"><span class="${rankColor}">${player.rank}</span></td>
+                    <td class="py-3 px-4">${player.playerId}</td>
+                    <td class="py-3 px-4">${player.igName}</td>
+                    <td class="py-3 px-4">${player.rlName}</td>
+                    <td class="py-3 px-4">${player.wins}</td>
+                    <td class="py-3 px-4">${player.kills}</td>
+                    <td class="py-3 px-4">${player.points}</td>
+                `;
+
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        // Function to render normal users
+        function renderNormalUsers() {
+            const normalUsersBody = document.getElementById('normal-users-body');
+            const noResults = document.getElementById('users-no-results');
+
+            // Clear existing rows
+            normalUsersBody.innerHTML = '';
+
+            // Apply search filter if there's a search query
+            let data = normalUsersData;
+            if (usersSearchQuery) {
+                data = normalUsersData.filter(user =>
+                    user.realName.toLowerCase().includes(usersSearchQuery.toLowerCase()) ||
+                    user.igId.includes(usersSearchQuery)
+                );
+            }
+
+            // Show/hide no results message
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            // Add rows to table
+            data.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-800 transition-colors';
+
+                row.innerHTML = `
+                    <td class="py-3 px-4">${user.realName}</td>
+                    <td class="py-3 px-4">${user.igName}</td>
+                    <td class="py-3 px-4">${user.igId}</td>
+                `;
+
+                normalUsersBody.appendChild(row);
+            });
+        }
+
+        // Function to update ranking tab styles
+        function updateRankingTabs() {
+            const rankingTabs = document.querySelectorAll('.ranking-tab');
+            rankingTabs.forEach(tab => {
+                if (tab.dataset.rank === currentRanking) {
+                    tab.classList.add('tab-active');
+                } else {
+                    tab.classList.remove('tab-active');
+                }
+            });
+        }
+
+        // Function to update category tab styles
+        function updateCategoryTabs() {
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            categoryTabs.forEach(tab => {
+                if (tab.dataset.category === currentCategory) {
+                    tab.classList.add('tab-active');
+                } else {
+                    tab.classList.remove('tab-active');
+                }
+            });
+        }
+
+        // Function to update users category tab styles
+        function updateUsersCategoryTabs() {
+            const usersCategoryTabs = document.querySelectorAll('.users-category-tab');
+            usersCategoryTabs.forEach(tab => {
+                if (tab.dataset.category === currentUsersCategory) {
+                    tab.classList.add('tab-active');
+                } else {
+                    tab.classList.remove('tab-active');
+                }
+            });
+        }
+
+        // Function to update sub-tab styles
+        function updateSubTabs() {
+            const subTabs = document.querySelectorAll('.sub-tab');
+            subTabs.forEach(tab => {
+                if (tab.dataset.mode === currentMode) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        // Function to handle search
+        function handleSearch() {
+            searchQuery = document.getElementById('player-search').value.trim();
+            renderLeaderboard();
+        }
+
+        // Function to handle users search
+        function handleUsersSearch() {
+            usersSearchQuery = document.getElementById('users-search').value.trim();
+            renderNormalUsers();
+        }
+
+        // Initialize leaderboard
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+            renderNormalUsers();
+            updateRankingTabs();
+            updateCategoryTabs();
+            updateUsersCategoryTabs();
+            updateSubTabs();
+
+            // Animate total users counter
+            const counterElement = document.getElementById('total-users-count');
+            animateCounter(counterElement, normalUsersData.length);
+
+            // Add event listeners to category tabs
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    currentCategory = tab.dataset.category;
+
+                    // Show/hide appropriate content
+                    const normalContent = document.getElementById('normal-content');
+                    const esportsContent = document.getElementById('esports-content');
+
+                    if (currentCategory === 'normal') {
+                        normalContent.classList.remove('hidden');
+                        esportsContent.classList.add('hidden');
+                    } else {
+                        normalContent.classList.add('hidden');
+                        esportsContent.classList.remove('hidden');
+                    }
+
+                    updateCategoryTabs();
+                });
+            });
+
+            // Add event listeners to users category tabs
+            const usersCategoryTabs = document.querySelectorAll('.users-category-tab');
+            usersCategoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    currentUsersCategory = tab.dataset.category;
+
+                    // Show/hide appropriate content
+                    const normalUsersContent = document.getElementById('normal-users-content');
+                    const esportsUsersContent = document.getElementById('esports-users-content');
+
+                    if (currentUsersCategory === 'normal') {
+                        normalUsersContent.classList.remove('hidden');
+                        esportsUsersContent.classList.add('hidden');
+                    } else {
+                        normalUsersContent.classList.add('hidden');
+                        esportsUsersContent.classList.remove('hidden');
+                    }
+
+                    updateUsersCategoryTabs();
+                });
+            });
+
+            // Add event listeners to sub-tabs
+            const subTabs = document.querySelectorAll('.sub-tab');
+            subTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    currentMode = tab.dataset.mode;
+                    renderLeaderboard();
+                    updateSubTabs();
+                });
+            });
+
+            // Add event listeners to ranking tabs
+            const rankingTabs = document.querySelectorAll('.ranking-tab');
+            rankingTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    currentRanking = tab.dataset.rank;
+                    renderLeaderboard();
+                    updateRankingTabs();
+                });
+            });
+
+            // Add event listeners to search
+            const searchInput = document.getElementById('player-search');
+            const searchButton = document.getElementById('search-button');
+
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+
+            searchButton.addEventListener('click', handleSearch);
+
+            // Add real-time search as user types
+            searchInput.addEventListener('input', () => {
+                // Debounce the search to avoid excessive filtering
+                clearTimeout(searchInput.debounceTimer);
+                searchInput.debounceTimer = setTimeout(() => {
+                    handleSearch();
+                }, 300);
+            });
+
+            // Add event listeners to users search
+            const usersSearchInput = document.getElementById('users-search');
+            const usersSearchButton = document.getElementById('users-search-button');
+
+            usersSearchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    handleUsersSearch();
+                }
+            });
+
+            usersSearchButton.addEventListener('click', handleUsersSearch);
+
+            // Add real-time search as user types
+            usersSearchInput.addEventListener('input', () => {
+                // Debounce the search to avoid excessive filtering
+                clearTimeout(usersSearchInput.debounceTimer);
+                usersSearchInput.debounceTimer = setTimeout(() => {
+                    handleUsersSearch();
+                }, 300);
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all content sections
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected content section
+            document.getElementById(pageId).classList.add('active');
+
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Add event listeners to navigation links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+                mobileMenu.classList.add('hidden'); // Close mobile menu
+            });
+        });
+
+        // Add event listeners to mobile navigation links
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+                mobileMenu.classList.add('hidden'); // Close mobile menu
+            });
+        });
+
+    </script>
+</body>
+
+</html>
